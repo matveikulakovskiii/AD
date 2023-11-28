@@ -61,17 +61,25 @@ namespace AD
         public void NaitaAndmed()
         {
             connect.Open();
-            ComboBox cb1 = new ComboBox();
             DataTable dt_Toode = new DataTable();
-            adapter_toode = new SqlDataAdapter("SELECT * FROM ToodeTabel INNER JOIN KategooriaTable on ToodeTabel.Kategooriad=KategooriaTable.Id", connect);
-            //INNER JOIN KategooriaTable on ToodeTabel.Kattegooriad=KategooriaTable.Id
+            DataTable table = new DataTable();
+            adapter_toode = new SqlDataAdapter("SELECT Toodenimetus, Kogus, Hind, Pilt, Kategooria_nimetus FROM ToodeTabel INNER JOIN KategooriaTable on ToodeTabel.Kategooriad=KategooriaTable.Id", connect);
             adapter_toode.Fill(dt_Toode);
+            table.Columns.Add("Nimetus");
+            table.Columns.Add("Kogus");
+            table.Columns.Add("Hind");
+            table.Columns.Add("Pilt");
+            DataGridViewComboBoxColumn dgvcb = new DataGridViewComboBoxColumn();
+            foreach (DataRow item in dt_Toode.Rows)
+            {
+                if (!dgvcb.Items.Contains(item["Kategooria_nimetus"]))
+                    dgvcb.Items.Add(item["Kategooria_nimetus"]);
+                table.Rows.Add(item["Toodenimetus"], item["Kogus"], item["Hind"], item["Pilt"]);
+            }
             dataGridView2.DataSource = dt_Toode;
-            DataSet ds = new DataSet();
-            adapter_toode.Fill(ds);
-            cb1.DataSource = ds.Tables["KategooriaTable"];
-            cb1.DisplayMember = ("Kategooriad");
-            cb1.ValueMember = ("Kategooria_nimetus");
+            dataGridView2.DataSource = table;
+            dataGridView2.Columns.Add(dgvcb);
+            dataGridView2.Columns[4].HeaderText = "Kategooriad";
             connect.Close();
         }
 
@@ -123,6 +131,7 @@ namespace AD
             }
         }
 
+       
         public void NaitaHind()
         {
             connect.Open();
