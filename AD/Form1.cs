@@ -4,6 +4,7 @@ using System.ComponentModel;
 using System.Data;
 using System.Data.SqlClient;
 using System.Drawing;
+using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -62,28 +63,21 @@ namespace AD
         {
             connect.Open();
             DataTable dt_Toode = new DataTable();
-            DataTable table = new DataTable();
-            adapter_toode = new SqlDataAdapter("SELECT Toodenimetus, Kogus, Hind, Pilt, Kategooria_nimetus FROM ToodeTabel INNER JOIN KategooriaTable on ToodeTabel.Kategooriad=KategooriaTable.Id", connect);
+            adapter_toode = new SqlDataAdapter("SELECT ToodeTabel.Id, Toodenimetus, Kogus, Hind, Pilt, Kategooria_nimetus FROM ToodeTabel INNER JOIN KategooriaTable on ToodeTabel.Kategooriad=KategooriaTable.Id", connect);
             adapter_toode.Fill(dt_Toode);
-            table.Columns.Add("Nimetus");
-            table.Columns.Add("Kogus");
-            table.Columns.Add("Hind");
-            table.Columns.Add("Pilt");
+            dataGridView2.DataSource = dt_Toode;
             DataGridViewComboBoxColumn dgvcb = new DataGridViewComboBoxColumn();
             foreach (DataRow item in dt_Toode.Rows)
             {
                 if (!dgvcb.Items.Contains(item["Kategooria_nimetus"]))
                     dgvcb.Items.Add(item["Kategooria_nimetus"]);
-                table.Rows.Add(item["Toodenimetus"], item["Kogus"], item["Hind"], item["Pilt"]);
             }
-            dataGridView2.DataSource = dt_Toode;
-            dataGridView2.DataSource = table;
+            
             dataGridView2.Columns.Add(dgvcb);
-            dataGridView2.Columns[4].HeaderText = "Kategooriad";
             connect.Close();
         }
-
-        private void lisa_btn_Click(object sender, EventArgs e)
+        int Id = 0;
+        public void lisa_btn_Click(object sender, EventArgs e)
         {
             if (txt_toode.Text.Trim()!=string.Empty && txt_kogus.Text.Trim()!=string.Empty && txt_box.Text.Trim()!=string.Empty && comboBox2.SelectedItem!=null)
             {
@@ -131,7 +125,51 @@ namespace AD
             }
         }
 
-       
+        SaveFileDialog save;
+        OpenFileDialog open;
+        private void btn_pilt_Click(object sender, EventArgs e)
+        {
+            open = new OpenFileDialog();
+            open.InitialDirectory = @"C:\Users\opilane\Source\Repos\Matvei Kulakovski\AD\AD\fotos";
+            open.Multiselect = true;
+            open.Filter = "Images Files(*.jeg; *.bmp; *.png; *.jpg)|*.jeg; *.bmp; *.png; *.jpg";
+
+            //FileInfo open_file = new FileInfo(@"C:\Users\opilane\Source\Repos\Matvei Kulakovski\AD\AD\fotos" + open.FileName);
+            if (open.ShowDialog() == DialogResult.OK && txt_toode.Text!=null)
+            {
+                save = new SaveFileDialog();
+                save.InitialDirectory = Path.GetFullPath(@"..\..\..\fotos");
+                save.FileName = txt_toode.Text + Path.GetExtension(open.FileName);
+                save.Filter = "Images" + Path.GetExtension(open.FileName)+"|"+Path.GetExtension(open.FileName);
+                if (save.ShowDialog() == DialogResult.OK)
+                {
+                    File.Copy(open.FileName,save.FileName);
+                    pb1.Image = Image.FromFile(save.FileName);
+                }
+            }
+            else
+            {
+                MessageBox.Show("Puudub toode nimetus või oli vajutatud Cancel");
+            }
+        }
+
+        private void dataGridView2_RowHeaderMouseClick(object sender, DataGridViewCellEventArgs e)
+        {
+            Id = (int)dataGridView2.Rows[e.RowIndex].Cells["id"].Value;
+            txt_toode.Text = dataGridView2.Rows[e.RowIndex].Cells[1].Value.ToString();
+            txt_kogus.Text = dataGridView2.Rows[e.RowIndex].Cells[2].Value.ToString();
+            txt_box.Text = dataGridView2.Rows[e.RowIndex].Cells[3].Value.ToString();
+            try 
+            {
+                pb1.Image = Image.FromFile(@"..\..\..\fotos" + dataGridView2.Rows[e.RowIndex].Cells[4].Value.ToString());
+            }
+            catch (Exception)
+            {
+                MessageBox.Show("Pilt puudub");
+            }
+            comboBox2.SelectedItem = dataGridView2.Rows[e.RowIndex].Cells[5].Value.ToString();
+        }
+
         public void NaitaHind()
         {
             connect.Open();

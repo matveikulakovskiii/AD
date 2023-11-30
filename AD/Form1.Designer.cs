@@ -40,7 +40,10 @@
             this.txt_toode = new System.Windows.Forms.TextBox();
             this.lisa_btn = new System.Windows.Forms.Button();
             this.kustuta = new System.Windows.Forms.Button();
+            this.pb1 = new System.Windows.Forms.PictureBox();
+            this.btn_pilt = new System.Windows.Forms.Button();
             ((System.ComponentModel.ISupportInitialize)(this.dataGridView2)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.pb1)).BeginInit();
             this.SuspendLayout();
             // 
             // dataGridView2
@@ -48,8 +51,9 @@
             this.dataGridView2.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
             this.dataGridView2.Location = new System.Drawing.Point(103, 351);
             this.dataGridView2.Name = "dataGridView2";
-            this.dataGridView2.Size = new System.Drawing.Size(766, 150);
+            this.dataGridView2.Size = new System.Drawing.Size(900, 150);
             this.dataGridView2.TabIndex = 0;
+            this.dataGridView2.CellContentClick += new System.Windows.Forms.DataGridViewCellEventHandler(this.dataGridView2_RowHeaderMouseClick);
             // 
             // comboBox2
             // 
@@ -146,9 +150,29 @@
             this.kustuta.UseVisualStyleBackColor = true;
             this.kustuta.Click += new System.EventHandler(this.kustuta_Click);
             // 
+            // pb1
+            // 
+            this.pb1.Location = new System.Drawing.Point(622, 17);
+            this.pb1.Name = "pb1";
+            this.pb1.Size = new System.Drawing.Size(381, 297);
+            this.pb1.TabIndex = 12;
+            this.pb1.TabStop = false;
+            // 
+            // btn_pilt
+            // 
+            this.btn_pilt.Location = new System.Drawing.Point(349, 221);
+            this.btn_pilt.Name = "btn_pilt";
+            this.btn_pilt.Size = new System.Drawing.Size(108, 23);
+            this.btn_pilt.TabIndex = 13;
+            this.btn_pilt.Text = "pilt";
+            this.btn_pilt.UseVisualStyleBackColor = true;
+            this.btn_pilt.Click += new System.EventHandler(this.btn_pilt_Click);
+            // 
             // Form1
             // 
             this.ClientSize = new System.Drawing.Size(1015, 540);
+            this.Controls.Add(this.btn_pilt);
+            this.Controls.Add(this.pb1);
             this.Controls.Add(this.kustuta);
             this.Controls.Add(this.lisa_btn);
             this.Controls.Add(this.txt_toode);
@@ -163,6 +187,7 @@
             this.Controls.Add(this.dataGridView2);
             this.Name = "Form1";
             ((System.ComponentModel.ISupportInitialize)(this.dataGridView2)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.pb1)).EndInit();
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -185,6 +210,8 @@
         private System.Windows.Forms.TextBox txt_toode;
         private System.Windows.Forms.Button lisa_btn;
         private System.Windows.Forms.Button kustuta;
+        private System.Windows.Forms.PictureBox pb1;
+        private System.Windows.Forms.Button btn_pilt;
     }
 }
 
