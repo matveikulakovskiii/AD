@@ -10,6 +10,13 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 
+
+
+
+
+
+
+
 namespace AD
 {
     public partial class Form1 : Form
@@ -67,13 +74,18 @@ namespace AD
             adapter_toode.Fill(dt_Toode);
             dataGridView2.DataSource = dt_Toode;
             DataGridViewComboBoxColumn dgvcb = new DataGridViewComboBoxColumn();
+            dgvcb.HeaderText = "Kategooria";
+            dgvcb.Name = "KategooriaColumn";
+            dgvcb.DataPropertyName = "Kategooria";
             foreach (DataRow item in dt_Toode.Rows)
             {
+                string category = item["Kategooria_nimetus"].ToString();
                 if (!dgvcb.Items.Contains(item["Kategooria_nimetus"]))
                     dgvcb.Items.Add(item["Kategooria_nimetus"]);
             }
             
             dataGridView2.Columns.Add(dgvcb);
+            
             connect.Close();
         }
         int Id = 0;
@@ -93,7 +105,7 @@ namespace AD
                     comand.Parameters.AddWithValue("@toode", txt_toode.Text);
                     comand.Parameters.AddWithValue("@kogus", txt_kogus.Text);
                     comand.Parameters.AddWithValue("@hind", txt_box.Text);
-                    comand.Parameters.AddWithValue("@pilt", txt_toode.Text + ".jpg");
+                    comand.Parameters.AddWithValue("@pilt", txt_toode.Text + extension);
                     comand.Parameters.AddWithValue("@kat", Id);//id
                     comand.ExecuteNonQuery();
                     connect.Close();
@@ -127,6 +139,7 @@ namespace AD
 
         SaveFileDialog save;
         OpenFileDialog open;
+        string extension = null;
         private void btn_pilt_Click(object sender, EventArgs e)
         {
             open = new OpenFileDialog();
@@ -139,9 +152,10 @@ namespace AD
             {
                 save = new SaveFileDialog();
                 save.InitialDirectory = Path.GetFullPath(@"..\..\..\fotos");
+                extension = Path.GetExtension(open.FileName);
                 save.FileName = txt_toode.Text + Path.GetExtension(open.FileName);
                 save.Filter = "Images" + Path.GetExtension(open.FileName)+"|"+Path.GetExtension(open.FileName);
-                if (save.ShowDialog() == DialogResult.OK)
+                if (save.ShowDialog() == DialogResult.OK && txt_toode.Text != null)
                 {
                     File.Copy(open.FileName,save.FileName);
                     pb1.Image = Image.FromFile(save.FileName);
@@ -156,18 +170,18 @@ namespace AD
         private void dataGridView2_RowHeaderMouseClick(object sender, DataGridViewCellEventArgs e)
         {
             Id = (int)dataGridView2.Rows[e.RowIndex].Cells["id"].Value;
-            txt_toode.Text = dataGridView2.Rows[e.RowIndex].Cells[1].Value.ToString();
-            txt_kogus.Text = dataGridView2.Rows[e.RowIndex].Cells[2].Value.ToString();
-            txt_box.Text = dataGridView2.Rows[e.RowIndex].Cells[3].Value.ToString();
+            txt_toode.Text = dataGridView2.Rows[e.RowIndex].Cells[2].Value.ToString();
+            txt_kogus.Text = dataGridView2.Rows[e.RowIndex].Cells[3].Value.ToString();
+            txt_box.Text = dataGridView2.Rows[e.RowIndex].Cells[4].Value.ToString();
             try 
             {
-                pb1.Image = Image.FromFile(@"..\..\..\fotos" + dataGridView2.Rows[e.RowIndex].Cells[4].Value.ToString());
+                pb1.Image = Image.FromFile(Path.Combine(Path.GetFullPath(@"..\..\fotos"), dataGridView2.Rows[e.RowIndex].Cells[5].Value.ToString()));
             }
             catch (Exception)
             {
                 MessageBox.Show("Pilt puudub");
             }
-            comboBox2.SelectedItem = dataGridView2.Rows[e.RowIndex].Cells[5].Value.ToString();
+            comboBox2.SelectedItem = dataGridView2.Rows[e.RowIndex].Cells[6].Value.ToString();
         }
 
         public void NaitaHind()
