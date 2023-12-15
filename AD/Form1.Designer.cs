@@ -42,6 +42,7 @@
             this.pb1 = new System.Windows.Forms.PictureBox();
             this.btn_pilt = new System.Windows.Forms.Button();
             this.dataGridView2 = new System.Windows.Forms.DataGridView();
+            this.kst_btn = new System.Windows.Forms.Button();
             ((System.ComponentModel.ISupportInitialize)(this.pb1)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.dataGridView2)).BeginInit();
             this.SuspendLayout();
@@ -167,9 +168,20 @@
             this.dataGridView2.Size = new System.Drawing.Size(820, 150);
             this.dataGridView2.TabIndex = 14;
             // 
+            // kst_btn
+            // 
+            this.kst_btn.Location = new System.Drawing.Point(484, 291);
+            this.kst_btn.Name = "kst_btn";
+            this.kst_btn.Size = new System.Drawing.Size(101, 23);
+            this.kst_btn.TabIndex = 15;
+            this.kst_btn.Text = "Kustuta";
+            this.kst_btn.UseVisualStyleBackColor = true;
+            this.kst_btn.Click += new System.EventHandler(this.kst_btn_Click);
+            // 
             // Form1
             // 
             this.ClientSize = new System.Drawing.Size(1015, 540);
+            this.Controls.Add(this.kst_btn);
             this.Controls.Add(this.dataGridView2);
             this.Controls.Add(this.btn_pilt);
             this.Controls.Add(this.pb1);
@@ -211,6 +223,7 @@
         private System.Windows.Forms.PictureBox pb1;
         private System.Windows.Forms.Button btn_pilt;
         private System.Windows.Forms.DataGridView dataGridView2;
+        private System.Windows.Forms.Button kst_btn;
     }
 }
 

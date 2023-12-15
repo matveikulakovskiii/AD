@@ -184,6 +184,21 @@ namespace AD
             comboBox2.SelectedItem = dataGridView2.Rows[e.RowIndex].Cells[6].Value.ToString();
         }
 
+        private void kst_btn_Click(object sender, EventArgs e)
+        {
+            if (comboBox2.SelectedItem != null)
+            {
+                string val_kat = comboBox2.SelectedItem.ToString();
+                comand = new SqlCommand("DELETE FROM ToodeTabel WHERE Toodenimetus = @toode, Kogus = @kogus, Hind = @hind, Pilt = @pilt, Kategooriad = @kat)", connect);
+                connect.Open();
+                comand.Parameters.AddWithValue("@Kat", val_kat);
+                comand.ExecuteNonQuery();
+                connect.Close();
+                comboBox2.Items.Clear();
+                NaitaKategooriad();
+            }
+        }
+
         public void NaitaHind()
         {
             connect.Open();
